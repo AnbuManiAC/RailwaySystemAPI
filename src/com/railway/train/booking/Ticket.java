@@ -12,14 +12,6 @@ public class Ticket {
 	private LocalDate date;
 	private String id;
 	
-
-	public Ticket(Passenger passenger, Train train, String berthAlloted, LocalDate date) {
-		this.setPassenger(passenger);
-		this.setTrain(train);
-		this.setBerthAlloted(berthAlloted);
-		this.setDate(date);
-		this.setId();
-	}
 	
 	public Passenger getPassenger() {
 		return passenger;

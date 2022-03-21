@@ -8,26 +8,13 @@ public class Passenger {
 	private String gender;
 	private String berthPreference;
 	private String  pnr;
-	
-	
-	
-	
-	public Passenger(String name, int age, String gender, String berthPreference) {
-		this.setName(name);
-		this.setAge(age);
-		this.setGender(gender);
-		this.setBerthPreference(berthPreference);;
-		this.setPnr();
-	}
-	
+	 
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
 	public String getGender() {
 		return gender;
 	}

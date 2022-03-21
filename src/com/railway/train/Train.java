@@ -11,17 +11,11 @@ public class Train {
 	private Station destination;
 	private HashMap<LocalDate,Availability> availability = new HashMap<>();
 	
-	
-	public Train(String number, String name, Station source, Station destination) {
-		this.setNumber(number);;
-		this.setName(name);;
-		this.setSource(source);;
-		this.setDestination(destination);
-		this.populateAvailabilities(LocalDate.now(),3);
-	}
 
-	private void populateAvailabilities(LocalDate startDate,int offset) {
-		for (LocalDate date = startDate; date.isBefore(startDate.plusDays(offset)); date = date.plusDays(1))
+	public void populateAvailabilities(String startDate,String endDate) {
+		LocalDate start_date = LocalDate.parse(startDate); 
+		LocalDate end_date = LocalDate.parse(endDate);
+		for (LocalDate date = start_date; date.isBefore(end_date); date = date.plusDays(1))
 		{
 		    availability.put(date, new Availability());
 		}

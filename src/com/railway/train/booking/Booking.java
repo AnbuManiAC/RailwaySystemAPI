@@ -4,24 +4,29 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.railway.db.Database;
+import com.railway.db.TicketTable;
+import com.railway.db.TrainTable;
 import com.railway.train.Availability;
 import com.railway.train.Train;
 
 public class Booking {
 	
+	
 
 	public static Ticket bookTicket(Passenger passenger,Train train,LocalDate date) {
 
-		Database db = Database.getInstance();
 
+		TicketTable tickets = TicketTable.getInstance();
+		TrainTable trains = TrainTable.getInstance();
+		
+		
 		Ticket ticket = null;
-		Availability avl = db.checkAvailability(train, date);
+		Availability avl = trains.checkAvailability(train, date);
 		if(avl!=null) {
 			List<Integer> waitingListPositions = avl.getWaitingListPositions();
 			List<Integer> racSeats = avl.getRacSeats();
 			String berthPreference = passenger.getBerthPreference();
-			String berthAlloted="";
+			String berthAlloted;
 			if(avl.isBerthAvailable(berthPreference)) {
 				berthAlloted = berthPreference;
 				
@@ -42,16 +47,19 @@ public class Booking {
 				ticket = bookBerth(ticket, passenger, train, avl, berthAlloted, date);
 			}
 			else if(racSeats.size()>0) {
-				ticket = new Ticket(passenger, train, "RAC",date);
+				berthAlloted = "RAC";
+				ticket = tickets.createTicket(passenger, train, berthAlloted, date);
+				
 				ticket.setSeatNumber(racSeats.get(0));
 				racSeats.remove(0);
-				db.getRacTicket().add(ticket);
+				tickets.getRacTicket().add(ticket);
 			}
 			else if(waitingListPositions.size()>0) {
-				ticket = new Ticket(passenger, train, "WL",date);
+				berthAlloted = "WL";
+				ticket = tickets.createTicket(passenger, train, berthAlloted, date);
 				ticket.setSeatNumber(waitingListPositions.get(0));
 				waitingListPositions.remove(0);
-				db.getWaitingList().add(ticket);
+				tickets.getWaitingList().add(ticket);
 			}
 							
 		}
@@ -60,24 +68,24 @@ public class Booking {
 	}
 	
 	private static Ticket bookBerth(Ticket ticket, Passenger passenger, Train train, Availability avl, String berthAlloted, LocalDate date) {
-		Database db = Database.getInstance();
+		TicketTable tickets = TicketTable.getInstance();
 
-		ticket = new Ticket(passenger, train, berthAlloted, date);
+		ticket = tickets.createTicket(passenger, train, berthAlloted, date);
 		List<Integer> berthSeat = avl.getSeatBerthMapping().get(berthAlloted);
 		
 		ticket.setSeatNumber(berthSeat.get(0));
 		berthSeat.remove(0);
-		db.getBerthTicket().add(ticket);
+		tickets.getBerthTicket().add(ticket);
 		return ticket;
 	}
 	
 	public static boolean cancelTicket(String pnr) {
-		Database db = Database.getInstance();
+		TicketTable tickets = TicketTable.getInstance();
 
 		
-		List<Ticket> berthTicket = db.getBerthTicket();
-		LinkedList<Ticket> racTicket = db.getRacTicket();
-		LinkedList<Ticket> waitingList = db.getWaitingList();
+		List<Ticket> berthTicket = tickets.getBerthTicket();
+		LinkedList<Ticket> racTicket = tickets.getRacTicket();
+		LinkedList<Ticket> waitingList = tickets.getWaitingList();
 		
 		for(int i=0;i<berthTicket.size();i++) {
 			if(berthTicket.get(i).getId().equals(pnr)) {
