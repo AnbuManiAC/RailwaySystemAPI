@@ -1,11 +1,14 @@
 package com.railway.db;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.railway.train.booking.Ticket;
+
 public class UserTable {
-	private List<User> users = new ArrayList<>();
-	
+	private HashMap<User,Boolean> users = new HashMap<>();
+	private HashMap<User, List<Ticket>> userAccessMapping = new HashMap<User, List<Ticket>>();
 	private UserTable() {
 		
 	}
@@ -19,9 +22,31 @@ public class UserTable {
 		return instance;
 	}
 
-	public List<User> getUsers(){
+	public HashMap<User, Boolean> getUsers(){
 		return users;
 	}
+
+	public User getCurrentUser() {
+		for(User user: users.keySet()) {
+			if(users.get(user).equals(true))
+				return user;
+		}
+		return null;
+		
+	}
+	public List<Ticket> getUserAccessMapping() {
+		for(User user: users.keySet()) {
+			if(users.get(user).equals(true))
+				return userAccessMapping.get(user);
+		}
+		return null;
+	}
+	
+//	public void mapUserAccess(User user, ArrayList<String> pnrs) {
+//		
+//		getUserAccessMapping().put(user, pnrs);
+//	}
+
 	public User createUser(String username, String password) {
 		User user  = new User();
 		user.setUsername(username);
@@ -29,27 +54,41 @@ public class UserTable {
 		return user;
 	}
 	public void insertUser(User user) {
-		users.add(user);
+		users.put(user,false);
+		
+		userAccessMapping.put(user, new ArrayList<Ticket>());
 	}
+
 	
-	
-	
-	
-	
-	public boolean isExistingUser(String name,String pwd) {
-		for(User user : users) {
+	public User searchUser(String name,String pwd) {
+		for(User user : users.keySet()) {
 			if(user.getUsername().equals(name) && user.getPassword().equals(pwd))
-				return true;
+				return user;
 		}
-		return false;
+		return null;
 	}
 	
 	public boolean checkUser(String username) {
-		for(User user : users) {
+		for(User user : users.keySet()) {
 			if(user.getUsername().equals(username))
 				return true;
 		}
 		return false;
 	}
+//	public void removeTicket(String pnr) {
+//		List<Ticket> tickets = getUserAccessMapping().get(user);
+//		for(int i=0;i<tickets.size();i++) {
+//			if(tickets.get(i).getId().equals(pnr))
+//				tickets.remove(i);
+//		}
+//	}
+//	public boolean isTicketExists(User user, String pnr) {
+//		List<Ticket> tickets = getUserAccessMapping().get(user);
+//		for(int i=0;i<tickets.size();i++) {
+//			if(tickets.get(i).getId().equals(pnr))
+//				return true;
+//		}
+//		return false;
+//	}
 	
 }

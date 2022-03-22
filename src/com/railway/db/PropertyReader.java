@@ -57,8 +57,10 @@ public class PropertyReader {
     	trains.insertTrain(train2);
     	
     	User user = users.createUser(prop.getProperty("username"), prop.getProperty("password"));
-    	
     	users.insertUser(user);
+    	user = users.createUser(prop.getProperty("username1"), prop.getProperty("password1"));
+    	users.insertUser(user);
+
     		    	
 	}
 	
