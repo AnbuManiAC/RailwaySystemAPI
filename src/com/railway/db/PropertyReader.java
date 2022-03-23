@@ -11,8 +11,10 @@ import com.railway.train.Train;
 
 public class PropertyReader {
 	
+	private Properties prop;
+	
 	private PropertyReader() {
-		
+		prop = new Properties();
 	}
 
 	private static PropertyReader instance = null;
@@ -33,9 +35,7 @@ public class PropertyReader {
 		File file = new File(filePath);
 		
 		InputStream input = new FileInputStream(file);
-            
-		Properties prop = new Properties();
-        
+                    
         prop.load(input);
         
         StationTable stations = StationTable.getInstance();
@@ -58,8 +58,7 @@ public class PropertyReader {
     	
     	User user = users.createUser(prop.getProperty("username"), prop.getProperty("password"));
     	users.insertUser(user);
-    	user = users.createUser(prop.getProperty("username1"), prop.getProperty("password1"));
-    	users.insertUser(user);
+    	
 
     		    	
 	}

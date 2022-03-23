@@ -2,6 +2,7 @@ package com.railway.db;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.railway.train.Availability;
@@ -27,22 +28,19 @@ public class TrainTable {
 	}
 	
 	public List<Train> getTrains(){
-		return trains;
+		final List<Train> trainsList = Collections.unmodifiableList(trains);
+		return trainsList;
 	}
-
+	
 	public Train createTrain(String number, String name, Station source, Station destination, String startDate , String endDate) {
-		Train train = new Train();
-		train.setNumber(number);
-		train.setName(name);
-		train.setSource(source);
-		train.setDestination(destination);
+		Train train = new Train(number,name,source,destination);
 		train.populateAvailabilities(startDate, endDate);
 		
 		return train;
 	}
 	
 	public void insertTrain(Train train) {
-		getTrains().add(train);
+		trains.add(train);
 	}
 	
 	public Train getTrainFromNumber(String trainNumber) {

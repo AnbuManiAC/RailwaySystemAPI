@@ -22,12 +22,7 @@ public class PassengerTable {
 	}
 
 	public Passenger createPassenger(String name, int age, String gender, String berthPreference) {
-		Passenger passenger = new Passenger();
-		passenger.setName(name);
-		passenger.setAge(age);
-		passenger.setGender(gender);
-		passenger.setBerthPreference(berthPreference);
-		passenger.setPnr();
+		Passenger passenger = new Passenger(name, age, gender, berthPreference);
 		
 		return passenger;
 	}

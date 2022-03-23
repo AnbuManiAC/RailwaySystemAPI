@@ -10,8 +10,10 @@ import com.railway.train.Availability;
 import com.railway.train.Train;
 
 public class Cancellation implements Cancellable {
+	
+	private Booking booking = new Booking();
 
-	public static boolean cancelTicket(String pnr) {
+	public boolean cancelTicket(String pnr) {
 		
 		TicketTable tickets = TicketTable.getInstance();
 		UserTable users = UserTable.getInstance();
@@ -43,7 +45,7 @@ public class Cancellation implements Cancellable {
 		
 	}
 
-	private static boolean cancelWaitingList(int i, LinkedList<Ticket> waitingList) {
+	private boolean cancelWaitingList(int i, LinkedList<Ticket> waitingList) {
 
 		Ticket t = waitingList.get(i);
 		Train train  = t.getTrain();
@@ -57,7 +59,7 @@ public class Cancellation implements Cancellable {
 		return true;
 	}
 
-	private static boolean cancelRacTicket(int i, LinkedList<Ticket> racTicket, LinkedList<Ticket> waitingList) {
+	private boolean cancelRacTicket(int i, LinkedList<Ticket> racTicket, LinkedList<Ticket> waitingList) {
 		Ticket t = racTicket.get(i);
 		Train train  = t.getTrain();
 		LocalDate date = t.getDate();
@@ -78,7 +80,7 @@ public class Cancellation implements Cancellable {
 		return true;
 	}
 
-	private static boolean cancelBerthTicket(int i, List<Ticket> berthTicket, LinkedList<Ticket> racTicket, LinkedList<Ticket> waitingList) {
+	private boolean cancelBerthTicket(int i, List<Ticket> berthTicket, LinkedList<Ticket> racTicket, LinkedList<Ticket> waitingList) {
 		
 		Ticket t = berthTicket.get(i);
 		Train train  = t.getTrain();
@@ -109,14 +111,14 @@ public class Cancellation implements Cancellable {
 		return true;
 	}
 	
-	private static void bookTicketforCancelledTicket(Ticket t) {
+	private void bookTicketforCancelledTicket(Ticket t) {
 		Train train  = t.getTrain();
 		LocalDate date = t.getDate();
 		Availability avl = train.getAvailability().get(date);
 		List<Integer> berthSeat =  avl.getSeatBerthMapping().get(t.getBerthAlloted());
 		berthSeat.add(t.getSeatNumber());
 		cancelUserTicket(t);
-		Booking.bookTicket(t.getPassenger(), t.getTrain(), t.getDate());
+		booking.bookTicket(t.getPassenger(), t.getTrain(), t.getDate());
 		t = null;
 	}
 	private static void cancelUserTicket(Ticket ticket) {

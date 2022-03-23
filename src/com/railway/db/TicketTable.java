@@ -50,13 +50,7 @@ public class TicketTable {
 	}
 	
 	public Ticket createTicket(Passenger passenger, Train train, String berthAlloted, LocalDate date) {
-		Ticket ticket = new Ticket();
-		ticket.setPassenger(passenger);
-		ticket.setTrain(train);
-		ticket.setBerthAlloted(berthAlloted);
-		ticket.setDate(date);
-		ticket.setId();
-		
+		Ticket ticket = new Ticket(passenger, train, date, berthAlloted);
 		return ticket;
 		
 	}

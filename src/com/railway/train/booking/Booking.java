@@ -14,7 +14,7 @@ public class Booking implements Book{
 	UserTable users = UserTable.getInstance();
 	
 	
-	public static Ticket bookTicket(Passenger passenger,Train train,LocalDate date) {
+	public Ticket bookTicket(Passenger passenger,Train train,LocalDate date) {
 
 		TicketTable tickets = TicketTable.getInstance();
 		TrainTable trains = TrainTable.getInstance();
@@ -70,7 +70,7 @@ public class Booking implements Book{
 		return ticket;
 	}
 	
-	private static Ticket bookBerth(Ticket ticket, Passenger passenger, Train train, Availability avl, String berthAlloted, LocalDate date) {
+	private Ticket bookBerth(Ticket ticket, Passenger passenger, Train train, Availability avl, String berthAlloted, LocalDate date) {
 		TicketTable tickets = TicketTable.getInstance();
 		
 		ticket = tickets.createTicket(passenger, train, berthAlloted, date);
@@ -82,7 +82,7 @@ public class Booking implements Book{
 		addUserTicket(ticket);
 		return ticket;
 	}
-	private static void addUserTicket(Ticket t) {
+	private void addUserTicket(Ticket t) {
 		UserTable users = UserTable.getInstance();
 		users.getUserAccessMapping().add(t);
 	}

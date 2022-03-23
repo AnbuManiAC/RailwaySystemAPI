@@ -7,8 +7,10 @@ import java.util.List;
 import com.railway.train.booking.Ticket;
 
 public class UserTable {
+	
 	private HashMap<User,Boolean> users = new HashMap<>();
 	private HashMap<User, List<Ticket>> userAccessMapping = new HashMap<User, List<Ticket>>();
+	
 	private UserTable() {
 		
 	}
@@ -41,11 +43,6 @@ public class UserTable {
 		}
 		return null;
 	}
-	
-//	public void mapUserAccess(User user, ArrayList<String> pnrs) {
-//		
-//		getUserAccessMapping().put(user, pnrs);
-//	}
 
 	public User createUser(String username, String password) {
 		User user  = new User();
@@ -75,20 +72,5 @@ public class UserTable {
 		}
 		return false;
 	}
-//	public void removeTicket(String pnr) {
-//		List<Ticket> tickets = getUserAccessMapping().get(user);
-//		for(int i=0;i<tickets.size();i++) {
-//			if(tickets.get(i).getId().equals(pnr))
-//				tickets.remove(i);
-//		}
-//	}
-//	public boolean isTicketExists(User user, String pnr) {
-//		List<Ticket> tickets = getUserAccessMapping().get(user);
-//		for(int i=0;i<tickets.size();i++) {
-//			if(tickets.get(i).getId().equals(pnr))
-//				return true;
-//		}
-//		return false;
-//	}
 	
 }
