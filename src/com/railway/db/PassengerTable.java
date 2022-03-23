@@ -3,10 +3,10 @@ package com.railway.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.railway.train.booking.Passenger;
+import com.railway.model.Passenger;
 
 public class PassengerTable {
-	private List<Passenger> passengers = new ArrayList<>();
+	private final List<Passenger> passengers = new ArrayList<>();
 	
 	private PassengerTable() {
 		
@@ -26,12 +26,8 @@ public class PassengerTable {
 		
 		return passenger;
 	}
-	
 	public void insertPassenger(Passenger passenger) {
-		getPassenger().add(passenger);
-	}
-	public List<Passenger> getPassenger() {
-		return passengers;
+		passengers.add(passenger);
 	}
 	public Passenger getPassengerFromPnr(String pnr) {
 		for(Passenger p:passengers) {

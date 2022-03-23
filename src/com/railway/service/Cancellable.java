@@ -1,4 +1,4 @@
-package com.railway.train.booking;
+package com.railway.service;
 
 public interface Cancellable {
 

@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.railway.train.Train;
-import com.railway.train.booking.Passenger;
-import com.railway.train.booking.Ticket;
+import com.railway.model.Passenger;
+import com.railway.model.Ticket;
+import com.railway.model.Train;
 
 public class TicketTable {
-	private List<Ticket> berthTicket = new ArrayList<>();
-	private LinkedList<Ticket> racTicket = new LinkedList<>();
-	private LinkedList<Ticket> waitingList = new LinkedList<>();
+	private final List<Ticket> berthTicket = new ArrayList<>();
+	private final LinkedList<Ticket> racTicket = new LinkedList<>();
+	private final LinkedList<Ticket> waitingList = new LinkedList<>();
 	
 	private TicketTable() {
 		
@@ -49,8 +49,8 @@ public class TicketTable {
 		waitingList.add(ticket);
 	}
 	
-	public Ticket createTicket(Passenger passenger, Train train, String berthAlloted, LocalDate date) {
-		Ticket ticket = new Ticket(passenger, train, date, berthAlloted);
+	public Ticket createTicket(Passenger passenger, Train train, LocalDate date, String berthAlloted, int seatNumber) {
+		Ticket ticket = new Ticket(passenger, train, date, berthAlloted, seatNumber);
 		return ticket;
 		
 	}

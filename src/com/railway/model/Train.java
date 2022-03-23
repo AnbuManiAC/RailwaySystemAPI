@@ -1,4 +1,4 @@
-package com.railway.train;
+package com.railway.model;
 
 import java.time.LocalDate;
 import java.util.HashMap;

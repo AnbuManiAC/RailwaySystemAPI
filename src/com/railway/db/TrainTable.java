@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.railway.train.Availability;
-import com.railway.train.Station;
-import com.railway.train.Train;
+import com.railway.model.Availability;
+import com.railway.model.Station;
+import com.railway.model.Train;
 
 
 public class TrainTable {
@@ -65,8 +65,8 @@ public class TrainTable {
 	public int getAvailableSeatCount(Train train,LocalDate date) {
 		Availability avl = train.getAvailability().get(date);
 		if(avl!=null)
-			return avl.getLowerBerthSeats().size() + avl.getMiddleBerthSeats().size() + avl.getUpperBerthSeats().size() + avl.getRacSeats().size() +
-				avl.getWaitingListPositions().size();
+			return avl.getLowerBerthSeatsCount() + avl.getMiddleBerthSeatsCount() + avl.getUpperBerthSeatsCount() + avl.getRacSeatsCount() +
+				avl.getWaitingListPositionsCount();
 		return -1;
 		
 	}

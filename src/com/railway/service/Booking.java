@@ -1,4 +1,4 @@
-package com.railway.train.booking;
+package com.railway.service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -6,8 +6,10 @@ import java.util.List;
 import com.railway.db.TicketTable;
 import com.railway.db.TrainTable;
 import com.railway.db.UserTable;
-import com.railway.train.Availability;
-import com.railway.train.Train;
+import com.railway.model.Availability;
+import com.railway.model.Passenger;
+import com.railway.model.Ticket;
+import com.railway.model.Train;
 
 public class Booking implements Book{
 	
@@ -16,15 +18,12 @@ public class Booking implements Book{
 	
 	public Ticket bookTicket(Passenger passenger,Train train,LocalDate date) {
 
-		TicketTable tickets = TicketTable.getInstance();
 		TrainTable trains = TrainTable.getInstance();
 		
 		
 		Ticket ticket = null;
 		Availability avl = trains.checkAvailability(train, date);
 		if(avl!=null) {
-			List<Integer> waitingListPositions = avl.getWaitingListPositions();
-			List<Integer> racSeats = avl.getRacSeats();
 			String berthPreference = passenger.getBerthPreference();
 			String berthAlloted;
 			if(avl.isBerthAvailable(berthPreference)) {
@@ -45,23 +44,16 @@ public class Booking implements Book{
 			else if(!berthPreference.equals("U") && avl.isBerthAvailable("U")) {
 				berthAlloted = "U";
 				ticket = bookBerth(ticket, passenger, train, avl, berthAlloted, date);
-			}
-			else if(racSeats.size()>0) {
-				berthAlloted = "RAC";
-				ticket = tickets.createTicket(passenger, train, berthAlloted, date);
-				ticket.setSeatNumber(racSeats.get(0));
-				racSeats.remove(0);
-				tickets.insertRacTicket(ticket);
-				addUserTicket(ticket);
 
 			}
-			else if(waitingListPositions.size()>0) {
+			else if(avl.isBerthAvailable("RAC")) {
+				berthAlloted = "RAC";
+				ticket = bookBerth(ticket, passenger, train, avl, berthAlloted, date);
+
+			}
+			else if(avl.isBerthAvailable("WL")) {
 				berthAlloted = "WL";
-				ticket = tickets.createTicket(passenger, train, berthAlloted, date);
-				ticket.setSeatNumber(waitingListPositions.get(0));
-				waitingListPositions.remove(0);
-				tickets.insertWaitingList(ticket);
-				addUserTicket(ticket);
+				ticket = bookBerth(ticket, passenger, train, avl, berthAlloted, date);
 
 			}
 							
@@ -72,19 +64,24 @@ public class Booking implements Book{
 	
 	private Ticket bookBerth(Ticket ticket, Passenger passenger, Train train, Availability avl, String berthAlloted, LocalDate date) {
 		TicketTable tickets = TicketTable.getInstance();
-		
-		ticket = tickets.createTicket(passenger, train, berthAlloted, date);
 		List<Integer> berthSeat = avl.getSeatBerthMapping().get(berthAlloted);
+
+		ticket = tickets.createTicket(passenger, train, date, berthAlloted, berthSeat.get(0));
 		
-		ticket.setSeatNumber(berthSeat.get(0));
+//		ticket.setSeatNumber(berthSeat.get(0));
 		berthSeat.remove(0);
-		tickets.insertBerthTicket(ticket);
+		if(berthAlloted.equals("RAC"))
+			tickets.insertRacTicket(ticket);
+		else if(berthAlloted.equals("WL"))
+			tickets.insertWaitingList(ticket);
+		else
+			tickets.insertBerthTicket(ticket);
 		addUserTicket(ticket);
 		return ticket;
 	}
 	private void addUserTicket(Ticket t) {
 		UserTable users = UserTable.getInstance();
-		users.getUserAccessMapping().add(t);
+		users.addUserAccessMapping(t);
 	}
 
 	

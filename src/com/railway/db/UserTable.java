@@ -1,15 +1,18 @@
 package com.railway.db;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.railway.train.booking.Ticket;
+import com.railway.model.Ticket;
+import com.railway.model.User;
 
 public class UserTable {
 	
-	private HashMap<User,Boolean> users = new HashMap<>();
-	private HashMap<User, List<Ticket>> userAccessMapping = new HashMap<User, List<Ticket>>();
+	private final Map<User,Boolean> users = new HashMap<>();
+	private final Map<User, List<Ticket>> userAccessMapping = new HashMap<User, List<Ticket>>();
 	
 	private UserTable() {
 		
@@ -24,8 +27,8 @@ public class UserTable {
 		return instance;
 	}
 
-	public HashMap<User, Boolean> getUsers(){
-		return users;
+	public Map<User, Boolean> getUsers(){
+		return Collections.unmodifiableMap(users);
 	}
 
 	public User getCurrentUser() {
@@ -39,15 +42,13 @@ public class UserTable {
 	public List<Ticket> getUserAccessMapping() {
 		for(User user: users.keySet()) {
 			if(users.get(user).equals(true))
-				return userAccessMapping.get(user);
+				return Collections.unmodifiableList(userAccessMapping.get(user));
 		}
 		return null;
 	}
 
 	public User createUser(String username, String password) {
-		User user  = new User();
-		user.setUsername(username);
-		user.setPassword(password);
+		User user  = new User(username,password);
 		return user;
 	}
 	public void insertUser(User user) {
@@ -72,5 +73,25 @@ public class UserTable {
 		}
 		return false;
 	}
+	public void changeUserStatus(User currentUser) {
+		boolean status = users.get(currentUser);
+		users.replace(currentUser, !status);
+	}
+
+	public void addUserAccessMapping(Ticket t) {
+
+		for(User user: users.keySet()) {
+			if(users.get(user).equals(true))
+				userAccessMapping.get(user).add(t);
+		}
+	}
+	public void removeUserAccessMapping(Ticket t) {
+
+		for(User user: users.keySet()) {
+			if(users.get(user).equals(true))
+				userAccessMapping.get(user).remove(t);
+		}
+	}
+	
 	
 }

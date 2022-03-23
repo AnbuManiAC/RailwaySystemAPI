@@ -6,8 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.railway.train.Station;
-import com.railway.train.Train;
+import com.railway.model.Station;
+import com.railway.model.Train;
+import com.railway.model.User;
 
 public class PropertyReader {
 	
@@ -28,7 +29,7 @@ public class PropertyReader {
 	
 	public void loadData() throws IOException {
 		
-		loadData(PropertyReader.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "com/railway/db/config.properties");
+		loadData(PropertyReader.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "resources/config.properties");
 	}
 	public void loadData(String filePath) throws IOException {
 		

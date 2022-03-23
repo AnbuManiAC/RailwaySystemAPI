@@ -1,7 +1,6 @@
-package com.railway.train.booking;
+package com.railway.model;
 
 import java.time.LocalDate;
-import com.railway.train.Train;
 
 public class Ticket {
 
@@ -12,11 +11,12 @@ public class Ticket {
 	private final LocalDate date;
 	private final String id;
 	
-	public Ticket(Passenger passenger, Train train, LocalDate date, String berthAlloted) {
+	public Ticket(Passenger passenger, Train train, LocalDate date, String berthAlloted, int seatNumber) {
 		this.passenger = passenger;
 		this.train = train;
 		this.date = date;
 		this.berthAlloted = berthAlloted;
+		this.seatNumber = seatNumber;
 		this.id = passenger.getPnr();
 	}
 	
@@ -26,29 +26,24 @@ public class Ticket {
 	public String getBerthAlloted() {
 		return berthAlloted;
 	}
-    void setBerthAlloted(String berthAlloted) {
-		this.berthAlloted = berthAlloted;
-	}
+    
 	public Train getTrain() {
 		return train;
 	}
 	public int getSeatNumber() {
 		return seatNumber;
 	}
-	void setSeatNumber(int seatNumber) {
-		this.seatNumber = seatNumber;
-	}
+	
 	public LocalDate getDate() {
 		return date;
 	}
 
 	public String getId() {
 		return id;
-	}	
-	
+	}
 
 	public void generateTicket() {
-		System.out.println(this.toString());
+		System.out.print(this.toString());
 	}
 
 	@Override

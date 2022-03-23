@@ -1,13 +1,13 @@
-package com.railway.train.booking;
+package com.railway.service;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.railway.db.TicketTable;
 import com.railway.db.UserTable;
-import com.railway.train.Availability;
-import com.railway.train.Train;
+import com.railway.model.Availability;
+import com.railway.model.Ticket;
+import com.railway.model.Train;
 
 public class Cancellation implements Cancellable {
 	
@@ -22,8 +22,8 @@ public class Cancellation implements Cancellable {
 		
 		if(users.getUserAccessMapping().contains(t)) {
 			List<Ticket> berthTicket = tickets.getBerthTicket();
-			LinkedList<Ticket> racTicket = tickets.getRacTicket();
-			LinkedList<Ticket> waitingList = tickets.getWaitingList();
+			List<Ticket> racTicket = tickets.getRacTicket();
+			List<Ticket> waitingList = tickets.getWaitingList();
 			
 			for(int i=0;i<berthTicket.size();i++) {
 				if(berthTicket.get(i).getId().equals(pnr)) {
@@ -45,7 +45,7 @@ public class Cancellation implements Cancellable {
 		
 	}
 
-	private boolean cancelWaitingList(int i, LinkedList<Ticket> waitingList) {
+	private boolean cancelWaitingList(int i, List<Ticket> waitingList) {
 
 		Ticket t = waitingList.get(i);
 		Train train  = t.getTrain();
@@ -59,7 +59,7 @@ public class Cancellation implements Cancellable {
 		return true;
 	}
 
-	private boolean cancelRacTicket(int i, LinkedList<Ticket> racTicket, LinkedList<Ticket> waitingList) {
+	private boolean cancelRacTicket(int i, List<Ticket> racTicket, List<Ticket> waitingList) {
 		Ticket t = racTicket.get(i);
 		Train train  = t.getTrain();
 		LocalDate date = t.getDate();
@@ -80,7 +80,7 @@ public class Cancellation implements Cancellable {
 		return true;
 	}
 
-	private boolean cancelBerthTicket(int i, List<Ticket> berthTicket, LinkedList<Ticket> racTicket, LinkedList<Ticket> waitingList) {
+	private boolean cancelBerthTicket(int i, List<Ticket> berthTicket, List<Ticket> racTicket, List<Ticket> waitingList) {
 		
 		Ticket t = berthTicket.get(i);
 		Train train  = t.getTrain();
@@ -93,12 +93,14 @@ public class Cancellation implements Cancellable {
 		berthTicket.remove(i);
 		if(racTicket.size()>0) {
 						
-			t = racTicket.poll();
+			t = racTicket.get(0);
+			racTicket.remove(0);
 			bookTicketforCancelledTicket(t);
 
 			if(waitingList.size()>0) {
 
-				t = waitingList.poll();
+				t = waitingList.get(0);
+				waitingList.remove(0);
 				bookTicketforCancelledTicket(t);
 
 			}
@@ -123,7 +125,7 @@ public class Cancellation implements Cancellable {
 	}
 	private static void cancelUserTicket(Ticket ticket) {
 		UserTable users = UserTable.getInstance();
-		users.getUserAccessMapping().remove(ticket);
+		users.removeUserAccessMapping(ticket);;
 	}
 	
 }

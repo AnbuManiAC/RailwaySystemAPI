@@ -32,5 +32,15 @@ public class Validator {
 		}
 		return false;
 	}
+	public static int validateInt(String num) {
+		int number;
+		try {
+			number = Integer.parseInt(num);
+		} catch (NumberFormatException e) {
+			System.out.println("\nNon numerical value found! Please enter valid number!\n");
+			return -1;
+		}
+		return number;
+	}
 	
 }
